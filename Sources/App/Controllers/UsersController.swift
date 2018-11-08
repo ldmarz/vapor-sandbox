@@ -7,7 +7,7 @@ struct UsersController: RouteCollection {
         
         userRoute.post(User.self, use: create)
         userRoute.get(use: getAll)
-        userRoute.get(User.parameter, use: getAll)
+        userRoute.get(User.parameter, use: findById)
         userRoute.get(User.parameter, "acronyms", use: getAcronyms)
     }
     
