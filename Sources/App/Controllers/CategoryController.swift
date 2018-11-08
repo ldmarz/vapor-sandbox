@@ -8,7 +8,7 @@ struct CategoriesController: RouteCollection {
     categoriesRoute.post(Category.self, use: create)
     categoriesRoute.get(use: getAll)
     categoriesRoute.get(Category.parameter, use: getById)
-    categoriesRoute.get(Category.parameter, "acronyms", use: getAcronyms )
+    categoriesRoute.get(Category.parameter, "acronyms", use: getAcronyms)
 }
   func create(_ req: Request, category: Category) throws -> Future<Category> {
     return category.save(on: req)
