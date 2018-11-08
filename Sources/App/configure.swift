@@ -20,10 +20,10 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     /// Register the configured PostgreSql database to the database config.
     var databases = DatabasesConfig()
     let databaseConfig = PostgreSQLDatabaseConfig(
-        hostname: "localhost",
-        username: "postgres",
-        database: "test",
-        password: "123456")
+        hostname: Environment.get("HOST") ?? "localhost",
+        username: Environment.get("USERNAME") ?? "postgres",
+        database: Environment.get("DATABASE") ?? "test",
+        password: Environment.get("PASSWORD") ?? "123456") 
     let database = PostgreSQLDatabase(config: databaseConfig)
     
     databases.add(database: database, as: .psql)
