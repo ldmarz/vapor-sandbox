@@ -15,6 +15,7 @@ struct AcronymsController: RouteCollection {
         acronymsRoutes.post(Acronym.self, use: saveAcronym)
         acronymsRoutes.put(Acronym.self, at: Acronym.parameter, use: updateAcronym)
         acronymsRoutes.post(Acronym.parameter, "categories", Category.parameter, use: addCategories)
+        acronymsRoutes.get(Acronym.parameter, "categories", use: getCategories)
 
     }
     
@@ -79,4 +80,12 @@ struct AcronymsController: RouteCollection {
                     .transform(to: .created)
         }
     }
+    
+    func getCategories(_ req: Request) throws -> Future<[Category]> {
+        return try  req.parameters.next(Acronym.self)
+            .flatMap(to: [Category].self) { acronym in
+                try acronym.categories.query(on: req).all()
+        }
+    }
 }
+ 
