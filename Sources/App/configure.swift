@@ -23,7 +23,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
         hostname: Environment.get("HOST") ?? "localhost",
         username: Environment.get("USERNAME") ?? "postgres",
         database: Environment.get("DATABASE") ?? "test",
-        password: Environment.get("PASSWORD") ?? "123456") 
+        password: Environment.get("PASSWORD") ?? "123456")
     let database = PostgreSQLDatabase(config: databaseConfig)
     
     databases.add(database: database, as: .psql)
@@ -35,6 +35,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     migrations.add(model: User.self, database: .psql)
     migrations.add(model: Acronym.self, database: .psql)
     migrations.add(model: Category.self, database: .psql)
+    migrations.add(model: AcronymCategoryPivot.self, database: .psql)
 //    migrations.add(model: actor.self, database: .psql)
     services.register(migrations)
     
