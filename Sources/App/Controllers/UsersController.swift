@@ -10,6 +10,7 @@ struct UsersController: RouteCollection {
         userRoute.get(use: getAll)
         userRoute.get(User.parameter, use: findById)
         userRoute.get(User.parameter, "acronyms", use: getAcronyms)
+        userRoute.put(User.self, at: User.parameter, use: updateUser)
     }
     
     func getAll(_ req: Request) throws -> Future<[User]> {
@@ -31,4 +32,15 @@ struct UsersController: RouteCollection {
                 try user.acronyms.query(on: req).all()
         }
     }
+    
+    func updateUser(_ req: Request, newUser: User) throws -> Future<User> {
+        return try req.parameters.next(User.self)
+            .flatMap { user in
+                user.name = newUser.name
+                user.username = newUser.username
+                user.password = try BCrypt.hash(newUser.password)
+                return user.save(on: req)
+        }
+    }
+    
 }
