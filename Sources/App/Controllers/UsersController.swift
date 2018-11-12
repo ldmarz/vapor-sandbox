@@ -13,17 +13,17 @@ struct UsersController: RouteCollection {
         userRoute.put(User.self, at: User.parameter, use: updateUser)
     }
     
-    func getAll(_ req: Request) throws -> Future<[User]> {
-        return User.query(on: req).all();
+    func getAll(_ req: Request) throws -> Future<[User.Public]> {
+        return User.query(on: req).decode(data: User.Public.self).all()
     }
     
-    func findById(_ req: Request) throws -> Future<User> {
-        return try req.parameters.next(User.self)
+    func findById(_ req: Request) throws -> Future<User.Public> {
+        return try req.parameters.next(User.self).convertToPublic()
     }
     
-    func create(_ req: Request, user: User) throws -> Future<User> {
+    func create(_ req: Request, user: User) throws -> Future<User.Public> {
         user.password = try BCrypt.hash(user.password)
-        return user.save(on: req);
+        return user.save(on: req).convertToPublic();
     }
     
     func getAcronyms(_ req: Request) throws -> Future<[Acronym]> {
@@ -33,13 +33,13 @@ struct UsersController: RouteCollection {
         }
     }
     
-    func updateUser(_ req: Request, newUser: User) throws -> Future<User> {
+    func updateUser(_ req: Request, newUser: User) throws -> Future<User.Public> {
         return try req.parameters.next(User.self)
             .flatMap { user in
                 user.name = newUser.name
                 user.username = newUser.username
                 user.password = try BCrypt.hash(newUser.password)
-                return user.save(on: req)
+                return user.save(on: req).convertToPublic()
         }
     }
     
