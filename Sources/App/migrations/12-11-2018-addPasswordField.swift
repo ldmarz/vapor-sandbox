@@ -14,7 +14,7 @@ struct AddUserPassword: Migration {
     
     static func prepare( on connection: PostgreSQLConnection ) -> Future<Void> {
         return Database.update(User.self, on: connection) { builder in
-            builder.field(for: \.password, type: .varchar, .default(.literal("")))
+            builder.field(for: \.password, type: .varchar, .default(.literal("123456")))
             
         }
     }

@@ -1,6 +1,7 @@
 import Foundation
 import Vapor
 import FluentPostgreSQL
+import Authentication
 
 
 final class User: Codable {
@@ -55,4 +56,13 @@ extension Future where T: User {
             return user.convertToPublic()
         }
     }
+}
+
+extension User: BasicAuthenticatable {
+    static let usernameKey: UsernameKey = \User.username
+    static let passwordKey: PasswordKey = \User.password
+}
+
+extension User: TokenAuthenticatable {
+    typealias TokenType = Token
 }
